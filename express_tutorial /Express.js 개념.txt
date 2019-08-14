@@ -1,0 +1,43 @@
+Express.js는 Node.js 위한 빠르고 간편한 웹 프레임워크
+다양한 웹 프레임워크가 있지만 현재까지 가장 많이 사용하는 엔진
+"Node.js의 핵심 모듈인 http와 Connect 컴포넌트를 기반으로 하는 웹 프레임워크
+설정보다는 관례와 같은 프레임워크, 노드 개발시 개발을 빠르고 손쉽게 할 수 있도록 도와주는 역할
+미들웨어 구조 때문에 가능, 자바스크립트로 작성된 다양한 기능의 미들웨어는 개발자가 필요한 것만 선택하여 익스프레스와 결합해 사용 가능"
+
+폴더 구조
+/myapp
+  ⌊ /bin
+      ⌊ www : 서버 구동을 위한 코드 기록, app.js 파일을 가져와 노드의 HTTP 객체와 연동하는 작업 이뤄짐
+  ⌊ /public : 정적 파일을 위한 폴더, js, img, css 등을 포함
+      ⌊ /images
+      ⌊ /javascripts
+      ⌊ /stylesheets
+  ⌊ /routes : 라우팅을 위한 폴더, 라우팅 리소스 별로 모듈을 만들어 라우팅 조직을 각 파일에 구현
+      ⌊ index.js 
+      ⌊ users.js
+  ⌊ /views
+      ⌊ index.jade
+  ⌊ app.js : 익스프레스 설정 파일이 담겨있는 핵심 코드
+  ⌊ package.json : 프로그램 이름, 버전 등 노드 프로그램의 정보를 기술해 필요한 모듈 설치
+
+
+  EJS 템플릿 엔진
+  : 템플릿 엔진이란 템플릿을 읽어 엔진의 문법과 설정에 따라 파일을 HTML형식으로 변환시키는 모듈
+  HTML에서 <% %>를 사용하여 서버의 데이터를 사용하거나 코드를 실행
+
+  1. <% js코드 %>
+  2. <% 출력할 js 객체 %> : js 객체를 router에서 받아올 수 있음
+
+
+  Express 프레임워크 : RESTful API
+  Representational State Transfer
+  : www와 같은 하이퍼미디어 시스템을 위한 소프트웨어 아키텍쳐
+  REST 서버는 클라이언트로 하여금 HTTP 프로토콜을 사용해 서버읮 정보에 접근 및 변경을 가능케 함
+  ex) text, xml, json
+
+  HTTP 메소드
+  1) GET : 조회
+  2) PUT : 생성, 업데이트
+  3) DELETE : 제거
+  4) POST : 생성
+  
