@@ -1,0 +1,11 @@
+{
+  "name": "mongoose_project",
+  "version": "1.0.0",
+  "description": "Express와 Mongoose를 통해 MongoDB와 연동하여 RESTful API 만들기",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
