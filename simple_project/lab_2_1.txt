@@ -1,0 +1,14 @@
+lab_2_1.js
+=================================
+1. 서버에 들어오는 url을 파싱하여 query로 만들고 이를 JSON 객체로 변환
+- query의 property key value는 str
+2. 서버에 접속 시 str값을 hashing
+- algorithmL SHA512, salting, key stretching을 모두 사용할 것
+3. hashing이 성공하면 JSON 데이터로 Response
+- JSON 객체의 property key에는 msg, hashed가 존재
+4. msg에는 성공 혹은 실패 메세지를, hashed에는 해싱된 문자열을 저장할 것
+5. 3000번 port로 해당 서버가 동작하도록 열어둘 것 
+
+URL 주소 입력 형식
+http://127.0.0.1:3000/?str=jisu
+서버 실행 결과 {"msg":"success","hashed":"Abrq06V7RrTk9N6t6d0dT1EATL5Gvlreh6iJIT4HzSo="}
