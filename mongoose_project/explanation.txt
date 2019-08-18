@@ -1,0 +1,4 @@
+##Express와 Mongoose를 통해 MongoDB와 연동하여 RESTful API 만들기##
+Mongoose: MongoDB 기반 ODM Node.JS 전용 라이브러리
+ODM(Object Data Mapping): 데이터베이스와 객체지향 프로그래밍 언어 사이 호환되지 않는 데이터를 변환하는 프로그래밍 기법
+
