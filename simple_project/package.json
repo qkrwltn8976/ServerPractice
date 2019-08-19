@@ -9,8 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crypto": "^1.0.1",
     "csvtojson": "^2.0.10",
+    "fs": "0.0.1-security",
     "json2csv": "^4.5.2",
+    "querystring": "^0.2.0",
     "request": "^2.88.0"
   }
 }
