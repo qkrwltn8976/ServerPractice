@@ -56,7 +56,6 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('randomChatFindClick', function(data) {
-        console.log(clients.length);
         for(var i=0; i<clients.length; i++) {
             if(clients[i].name == data.name) {
                 // 해당 사용자의 상태를 finding으로 변경
@@ -95,7 +94,27 @@ io.sockets.on('connection', function(socket) {
                 }
             }
         }
-    })
+    });
+
+    socket.on('message', function(result) {
+        // message 이벤트를 발생시킨 사용자와 같은 방에 있는 대화 상대들에게 문자열 전달
+        io.sockets.to(result.roomName).emit('message', result.data);
+    });
+
+    socket.on('chatClosingBtn', function(data) {
+        // 나가기 버튼을 누른 사용자와 같은 방에 있는 사용자에게 chatEnd 이벤트 발생
+        io.sockets.to(data.roomName).emit('chatEnd');
+    });
+
+    socket.on('chatClosing', function(data) {
+        for(var i=0; i<clients.length; i++) {
+            clients[i].client.join(clients[i].client.id);
+            // clients[i].client.id는 사용자 소켓의 고유한 아이디값
+            // 이 값을 통해 사용자는 다른 사용자와 매칭이 되기 전까지 자신만의 독방에 존재
+            clients[i].roomName = '';
+            clients[i].status = notFinding;
+        }
+    });
     // console.log('클라이언트가 소켓 서버에 접속했습니다');
 
 });

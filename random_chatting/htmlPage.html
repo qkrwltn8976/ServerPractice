@@ -95,6 +95,47 @@
                     // 주기적으로 발생하는 randomChatFinding 중단
                     handle = null;
                 }
+
+                $('#sendMessage').on('click', function() {
+                    var content = $('#content').val(); // 대화 내용을 입력하는 창의 값
+                    console.log(content);
+                    if(!content) { // 대화 내용을 입력하지 않았을 경우
+                        alert('대화 내용을 입력해주세요');
+                        return;
+                    }
+
+                    var str = '';
+                    str += '<li>';
+                    str += '<strong>' + nickName + '</strong>';
+                    str += '<p>' + content + '</p>';
+                    str += '<hr>';
+                    str += '</li>';
+
+                    socket.emit('message', {roomName: roomName, data: str});
+                    // message 이벤트를 발생시켜 대화방 이름과 문자열을 전달
+                    $('#content').val('');
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                    // 채팅창의 스크롤바를 맨 밑으로 내림
+                });
+
+                socket.on('message', function(data) {
+                    // 서버로부터 전달받은 데이터를 채팅창에 append하여 채팅창에 메세지가 보여지게 됨
+                    $('#chat').append(data);
+                });
+
+                $('#closing').on('click', function() {
+                    // 나가기 버튼을 클릭했을 경우
+                    socket.emit('chatClosingBtn', {roomName: roomName});
+                });
+
+                socket.on('chatEnd', function(data) {
+                    $('#chat').append('<li><p>대화방이 종료되었습니다</p><hr></li>');
+                    $('#sendMessage').hide();
+                    $('#closing').hide();
+                    
+                    socket.emit('chatClosing', {roomName: roomName});
+                    // 채팅방에서 나가기 위해서는 서버쪽에서 처리를 해주어야 함
+                })
             }
         </script>
     </head>
