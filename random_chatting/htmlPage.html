@@ -27,9 +27,10 @@
 
         <script>
             window.onload = function() {
-                var nickName = "";
-                var socket = io.connect();
-                // 웹 소켓 서버에 연결
+                var nickName = '';
+                var roomName = ''; // 방 이름 저장 변수
+                var handle = null; // 일정 주기로 반복될 코드 핸들링 변수
+                var socket = io.connect(); // 웹 소켓 서버에 연결
 
                 $('#nicknameBtn').on('click', function() {
                     var nicknameValue = $('input[name="nickname"]').val();
@@ -56,6 +57,44 @@
                     $('#randomChatFindBtn').show();
                     // 랜덤채팅시작 버튼을 화면에 띄움
                 });
+
+                $('#randomChatFindBtn').on('click', function() {
+                    // 랜덤채팅시작버튼 클릭 이벤트
+                    $('#chat').html(''); 
+                    // 채팅창(대화내역) 비움
+                    socket.emit('randomChatFindClick', { name: nickName });
+                    // 서버에 닉네임 전달
+                });
+
+                socket.on('randomChatFindClickComplete', function() {
+                    $('#chat').html('').append('<li>대화 상대를 찾고 있습니다..</li>');
+                    startFinding(); // 대화 상대 찾기 시작
+                });
+
+                socket.on('randomChatFindingComplete', function(data) {
+                    stopFinding(); // 대화 상대 탐색 중단
+                    $('#chat').html('').append('<li><p>대화방에 입장했습니다~!</p><hr></li>');
+                    $('#sendMessage').show();
+                    $('#closing').show();
+                    $('#randomChatFindBtn').hide();
+                    roomName = data;
+                });
+
+                function startFinding() { 
+                    // 대화 상대를 찾도록 하는 함수
+                    if(handle == null) {
+                        handle = setInterval(function() {
+                            socket.emit('randomChatFinding', {name: nickName}, 500);
+                        }) // 0.5초를 주기로 randomChatFinding 이벤트 발생과 동시에 닉네임 전달
+                    }
+                }
+
+                function stopFinding() {
+                    // 대화 상대를 찾아 탐색을 중단하는 함수
+                    clearInterval(handle);
+                    // 주기적으로 발생하는 randomChatFinding 중단
+                    handle = null;
+                }
             }
         </script>
     </head>
@@ -92,7 +131,7 @@
                         <div class="col-xs-3">
                             <button class="btn btn-primary" id="sendMessage">보내기</button>
                             <button class="btn btn-danger" id="closing">나가기</button>
-                            <button class="btn btn-warning" id="ramdomChatFindBtn">랜덤채팅시작</button>
+                            <button class="btn btn-warning" id="randomChatFindBtn">랜덤채팅시작</button>
                         </div>
                     </div>
                 </div>

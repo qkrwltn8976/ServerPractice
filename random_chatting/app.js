@@ -50,12 +50,54 @@ io.sockets.on('connection', function(socket) {
             roomName: "", // 사용자가 들어가 있는 방의 이름
             status: notFinding // 사용자의 상태, notFinding 상태로 초기화
         });
-
+        
         socket.name = data.name;
         socket.emit('nickNameCheckComplete');
+    });
+
+    socket.on('randomChatFindClick', function(data) {
+        console.log(clients.length);
+        for(var i=0; i<clients.length; i++) {
+            if(clients[i].name == data.name) {
+                // 해당 사용자의 상태를 finding으로 변경
+                clients[i].status = finding;
+                socket.emit('randomChatFindClickComplete');
+                return;
+            }
+        }
+    });
+
+    socket.on('randomChatFinding', function(data) {
+        // 클라이언트에서 일정한 주기로 반복적으로 발생시킬 이벤트
+        // 사용자와 대화방을 찾고 있는 상대를 매칭
+        for(var i=0; i<clients.length; i++) {
+            if(clients[i].status == finding) {
+                if(clients[i].name == data.name) {
+                    continue;
+                } else {
+                    var roomName = new Date().getTime() + '';
+                    clients[i].status = chatting; // 상대의 상태 chating으로 전환
+                    clients[i].roomName = roomName; // 상대가 들어가있는 방 이름이 roomName
+                    clients[i].client.join(roomName); // 방으로 이동
+                    // client[i].client : 해당 사용자의 socket 객체
+                    // socket의 join 메서드를 사용하여 사용자를 방으로 강제 이동
+
+                    for(var j=0; j<clients.length; j++) {
+                        if(clients[j].name == data.name) {
+                            clients[j].status = chatting;
+                            clients[j].roomName = roomName;
+                            clients[j].client.join(roomName); // 대화방을 찾고 있는 상대와 같은 방으로 이동
+                            
+                            io.sockets.to(roomName).emit('randomChatFindingComplete', roomName);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     })
-    console.log('클라이언트가 소켓 서버에 접속했습니다');
-    
+    // console.log('클라이언트가 소켓 서버에 접속했습니다');
+
 });
 // connection 이벤트는 클라이언트가 소켓 서버에 접속할 때 발생하는 이벤트
 // 콜백함수에 있는 socket이라는 변수는 접속한 클라이언트와 소켓서버가 실시간 양방향 통신을 할 수 있도록 하는 소켓객체
