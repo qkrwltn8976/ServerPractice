@@ -135,7 +135,32 @@
                     
                     socket.emit('chatClosing', {roomName: roomName});
                     // 채팅방에서 나가기 위해서는 서버쪽에서 처리를 해주어야 함
-                })
+                });
+
+                socket.on('discWhileChat', function() {
+                    socket.emit('chatClosingBtn', {roomName: roomName});
+                });
+
+                socket.on('nickNameCheckComplete', function() {
+                    $('#chatBox').removeClass('chatDisabled').addClass('chatable');
+                    $('#nickNameForm').css('display', 'none');
+                    $('#sendMessage').hide();
+                    $('#randomChatFindBtn').show();
+                    clientCounting();
+                });
+
+                socket.on('clientsCount', function(data) {
+                    $('.clientsCount').html(data);
+                });
+                
+                function clientCounting() {
+                    setInterval(function() {
+                        socket.emit('clientsCount');
+                    }, 1500);
+                    // 1.5초마다 clientsCount 이벤트 발생
+                }
+
+                
             }
         </script>
     </head>

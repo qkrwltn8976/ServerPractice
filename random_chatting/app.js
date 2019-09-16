@@ -115,6 +115,22 @@ io.sockets.on('connection', function(socket) {
             clients[i].status = notFinding;
         }
     });
+
+    socket.on('disconnect', function() {
+        // 사이트를 새로고침하거나 사이트에서 나갈 때 disconnect 이벤트 발생
+        for(var i=0; i<clients.length; i++) {
+            if(clients[i].name == socket.name) {
+                var aroom = clients[i].roomName;
+                // 사용자의 정보를 클라이언트 배열에서 삭제
+                clients.slice(a, 1);
+                io.sockets.to(aroom).emit('discWhileChat');
+            }
+        }
+    });
+
+    socket.on('clientsCount', function() {
+        io.sockets.emit('clientsCount', clients.length);
+    });
     // console.log('클라이언트가 소켓 서버에 접속했습니다');
 
 });
